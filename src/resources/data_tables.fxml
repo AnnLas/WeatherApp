@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+    <TableView fx:id="weatherdata_table" prefHeight="549.0" prefWidth="800.0">
+        <columns>
+            <TableColumn fx:id="time_column" prefWidth="100.0" text="Time" />
+            <TableColumn fx:id="date_column" prefWidth="100.0" text="Date" />
+            <TableColumn fx:id="town_column" prefWidth="100.0" text="Town" />
+            <TableColumn fx:id="temperature_column" prefWidth="100.0" text="Temperature" />
+            <TableColumn fx:id="pressure_column" prefWidth="100.0" text="Pressure" />
+            <TableColumn fx:id="humidity_column" prefWidth="100.0" text="Humidity" />
+        </columns>
+    </TableView>
+</children>
+</fx:root>

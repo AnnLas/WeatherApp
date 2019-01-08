@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox prefHeight="549.0" prefWidth="800.0">
+            <children>
+                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #00363a;">
+                    <children>
+                        <Label text="Temperature" textFill="#43e1d9">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <ImageView fitHeight="136.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/sample/temperature.png" />
+                            </image>
+                        </ImageView>
+                        <Text fx:id="temperature_stats" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="144.7294921875" />
+                    </children>
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </HBox.margin>
+                </VBox>
+                <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #00363a;">
+                    <children>
+                        <Label text="Humidity" textFill="#43e1d9">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <ImageView fitHeight="136.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/sample/humidity.png" />
+                            </image>
+                        </ImageView>
+                        <Text fx:id="humidity_stats" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="144.7294921875" />
+                    </children>
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </HBox.margin>
+                </VBox>
+                <VBox alignment="TOP_CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #00363a;">
+                    <children>
+                        <Label text="Pressure" textFill="#43e1d9">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <ImageView fitHeight="136.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/sample/pressure.png" />
+                            </image>
+                        </ImageView>
+                        <Text fx:id="pressure_stats" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="144.7294921875" />
+                    </children>
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </HBox.margin>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</fx:root>

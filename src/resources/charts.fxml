@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+    <TabPane fx:id="charts" prefHeight="549.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Temperature">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <LineChart fx:id="temperature_chart" prefHeight="517.0" prefWidth="800.0">
+                                <xAxis>
+                                    <CategoryAxis label="Time [min]" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Temperature[C]" side="LEFT" />
+                                </yAxis>
+                            </LineChart>
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
+            <Tab text="Humidity">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <ScatterChart fx:id="humidity_chart" prefHeight="511.0" prefWidth="740.0">
+                                <xAxis>
+                                    <CategoryAxis label="Time [min]" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Humidity[%]" side="LEFT" />
+                                </yAxis>
+                            </ScatterChart>
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
+            <Tab text="Pressure">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <LineChart fx:id="pressure_chart" prefHeight="517.0" prefWidth="800.0">
+                                <xAxis>
+                                    <CategoryAxis label="Time [min]" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Pressure[HPa]" side="LEFT" />
+                                </yAxis>
+                            </LineChart>
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
+        </tabs>
+    </TabPane>
+</children>
+</fx:root>
