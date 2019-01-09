@@ -1,0 +1,121 @@
+[
+  {
+    "temp": 1.0,
+    "pressure": 999.0,
+    "humidity": 98.0,
+    "town": "Wroclaw",
+    "registrationTime": {
+      "hour": 8,
+      "minute": 49,
+      "second": 56,
+      "nano": 502000000
+    },
+    "registrationDate": {
+      "year": 2019,
+      "month": 1,
+      "day": 9
+    }
+  },
+  {
+    "temp": 1.0,
+    "pressure": 999.0,
+    "humidity": 98.0,
+    "town": "Wroclaw",
+    "registrationTime": {
+      "hour": 8,
+      "minute": 49,
+      "second": 57,
+      "nano": 560000000
+    },
+    "registrationDate": {
+      "year": 2019,
+      "month": 1,
+      "day": 9
+    }
+  },
+  {
+    "temp": 1.0,
+    "pressure": 999.0,
+    "humidity": 98.0,
+    "town": "Wroclaw",
+    "registrationTime": {
+      "hour": 8,
+      "minute": 49,
+      "second": 58,
+      "nano": 636000000
+    },
+    "registrationDate": {
+      "year": 2019,
+      "month": 1,
+      "day": 9
+    }
+  },
+  {
+    "temp": 1.0,
+    "pressure": 999.0,
+    "humidity": 98.0,
+    "town": "Wroclaw",
+    "registrationTime": {
+      "hour": 8,
+      "minute": 50,
+      "second": 14,
+      "nano": 82000000
+    },
+    "registrationDate": {
+      "year": 2019,
+      "month": 1,
+      "day": 9
+    }
+  },
+  {
+    "temp": 1.76,
+    "pressure": 1005.32,
+    "humidity": 99.0,
+    "town": "Mielno",
+    "registrationTime": {
+      "hour": 8,
+      "minute": 50,
+      "second": 19,
+      "nano": 190000000
+    },
+    "registrationDate": {
+      "year": 2019,
+      "month": 1,
+      "day": 9
+    }
+  },
+  {
+    "temp": 1.76,
+    "pressure": 1005.32,
+    "humidity": 99.0,
+    "town": "Mielno",
+    "registrationTime": {
+      "hour": 8,
+      "minute": 50,
+      "second": 35,
+      "nano": 103000000
+    },
+    "registrationDate": {
+      "year": 2019,
+      "month": 1,
+      "day": 9
+    }
+  },
+  {
+    "temp": 1.76,
+    "pressure": 1005.32,
+    "humidity": 99.0,
+    "town": "Mielno",
+    "registrationTime": {
+      "hour": 8,
+      "minute": 50,
+      "second": 40,
+      "nano": 226000000
+    },
+    "registrationDate": {
+      "year": 2019,
+      "month": 1,
+      "day": 9
+    }
+  }
+]

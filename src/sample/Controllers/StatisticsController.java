@@ -1,5 +1,6 @@
 package sample.Controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -64,7 +65,7 @@ public class StatisticsController extends AnchorPane implements Initializable, O
     }
 
 
-    public String calcStats(ArrayList <Double> arrayList) {
+    private String calcStats(ArrayList <Double> arrayList) {
         double sumMean = 0;
         double sumStd = 0;
         double min = 3000;
@@ -86,10 +87,18 @@ public class StatisticsController extends AnchorPane implements Initializable, O
         return String.format("%nAverage: %.2f%nNumber of records: %d%nMin: %.2f%nMax: %.2f%nStandard deviation: %.2f%n", average, arrayList.size(), min, max, standardDeviation);
     }
 
-    private void displayData(){
+    public void displayData(){
+        Platform.runLater(()->{
          pressure_stats.setText(calcStats(dataHolder.getPressureValues()));
          temperature_stats.setText(calcStats(dataHolder.getTemperatureValues()));
          humidity_stats.setText(calcStats(dataHolder.getHumidityValues()));
+        });
+    }
+    public void clearData(){
+        pressure_stats.setText("-");
+        temperature_stats.setText("-");
+        humidity_stats.setText("-");
+        weatherStation.getDataHolder().clearData();
     }
 
 

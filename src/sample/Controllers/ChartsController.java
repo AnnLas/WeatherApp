@@ -70,6 +70,11 @@ public class ChartsController extends AnchorPane implements Initializable, Obser
         WeatherData w = weatherStation.getWeatherData();
         addDataToChart(w);
     }
+    public void update(Observable observable){
+        weatherStation = (WeatherStation) observable;
+        WeatherData w = weatherStation.getWeatherData();
+        addDataToChart(w);
+    }
 
     public void showData(DataHolder dataHolder) {
 
@@ -108,5 +113,15 @@ public class ChartsController extends AnchorPane implements Initializable, Obser
         });
 
     }
+    public void clearData(){
+        humidity_series.getData().clear();
+        temp_series.getData().clear();
+        pressure_series.getData().clear();
+        humidity_chart.getData().clear();
+        temperature_chart.getData().clear();
+        pressure_chart.getData().clear();
+
+    }
+
 
 }

@@ -1,22 +1,27 @@
 package sample.Controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import sample.WeatherData.DataHolder;
 import sample.WeatherData.WeatherData;
 import sample.WeatherData.WeatherStation;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,11 +29,15 @@ public class MainController implements Observer {
     private WeatherStation weatherStation;
     private Observable weatherData;
     private DataHolder dataHolder;
+    private ChartsController chartsController;
+    private DataTablesController dataTablesController;
+    private StatisticsController statisticsController;
 
 
     public MainController() {
-     weatherStation = new WeatherStation();
-     weatherStation.addObserver(this);
+        weatherStation = new WeatherStation();
+        weatherStation.addObserver(this);
+        showCurrentData(weatherStation.getWeatherData());
     }
 
     @FXML
@@ -63,7 +72,25 @@ public class MainController implements Observer {
 
     @FXML
     void inerruptRegistration(ActionEvent event) {
+        weatherStation.interrupt();
+        //zapis
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        Stage stage = new Stage();
+        stage.setTitle("Choose directory");
+        File selectedDirectory = directoryChooser.showDialog(stage);
+
+        if (selectedDirectory == null) {
+
+        } else {
+            System.out.println(selectedDirectory.getAbsolutePath());
+            weatherStation.getDataHolder().saveToJson(selectedDirectory.getAbsolutePath());
+
+        }
+        clearData();
+        interrupt_button.setDisable(true);
     }
+
 
     @FXML
     void startRegistration(ActionEvent event) {
@@ -83,45 +110,124 @@ public class MainController implements Observer {
                 weatherStation.setInterval(Integer.valueOf(request_frequency.getText()) * 1000);
                 weatherStation.start();
                 town_search.setDisable(true);
-                interrupt_button.setDisable(false);
+                interrupt_button.setDisable(true);
                 registration_button.setText("Stop");
             }
         } else {
             weatherStation.stop();
             town_search.setDisable(false);
+            interrupt_button.setDisable(false);
             registration_button.setText("Start");
         }
     }
 
     public void showCharts(MouseEvent mouseEvent) {
-           main_pane.getChildren().clear();
-           ChartsController chartsController = new ChartsController(weatherStation);
-           main_pane.setCenter(chartsController);
+        main_pane.getChildren().clear();
+        chartsController = new ChartsController(weatherStation);
+        main_pane.setCenter(chartsController);
+        showCurrentData(weatherStation.getWeatherData());
 
     }
 
     public void showStatistics(MouseEvent mouseEvent) {
         main_pane.getChildren().clear();
-        StatisticsController statisticsController = new StatisticsController(weatherStation);
+        statisticsController = new StatisticsController(weatherStation);
         main_pane.setCenter(statisticsController);
+        showCurrentData(weatherStation.getWeatherData());
 
-         
+
     }
 
     public void showDataTable(MouseEvent mouseEvent) {
         main_pane.getChildren().clear();
-        DataTablesController dataTablesController = new DataTablesController(weatherStation);
+        dataTablesController = new DataTablesController(weatherStation);
         main_pane.setCenter(dataTablesController);
+        showCurrentData(weatherStation.getWeatherData());
     }
 
+    @FXML
+    WeatherData[] openFile(ActionEvent event) {
 
-    public void openFile(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        Stage stage = new Stage();
+        stage.setTitle("Choose directory");
+        File selectedDirectory = fileChooser.showOpenDialog(stage);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        WeatherData[] dataFromFile = null;
+        if (selectedDirectory == null) {
+
+        } else {
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(selectedDirectory));
+                dataFromFile = gson.fromJson(bufferedReader, WeatherData[].class);
+                System.out.println(Arrays.toString(dataFromFile));
+                weatherStation.getDataHolder().setWeatherDataSet(new ArrayList<WeatherData>(Arrays.asList(dataFromFile)));
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return dataFromFile;
     }
 
     @Override
     public void update(Observable observable, Object o) {
         weatherStation = (WeatherStation) observable;
-        System.out.println("results:"+weatherStation.getWeatherData().toString());
+        System.out.println("results:" + weatherStation.getWeatherData().toString());
+        showCurrentData(weatherStation.getWeatherData());
+    }
+
+    private void showCurrentData(WeatherData weather) {
+        if (weatherStation.getResponseCode() == 200 && weatherStation.getDataHolder().getHumidityValues().size() != 0) {
+            temperature_text.setText((weather.getTemp()) + "C");
+            humidity_text.setText((weather.getHumidity()) + "%");
+            pressure_text.setText((weather.getPressure() + "HPa"));
+            String imagePath = "";
+
+
+            if (weather.getTemp() < 0) {
+                if (weather.getHumidity() > 80) {
+                    imagePath = "src/sample/images/snow.png";
+                } else imagePath = "src/sample/images/cold.png";
+            }
+            if (weather.getTemp() >= 0) {
+                if (weather.getHumidity() > 80) {
+                    imagePath = "src/sample/images/rain.png";
+                } else if (weather.getTemp() < 10) {
+                    imagePath = "src/sample/images/cloudy.png";
+                } else if (weather.getTemp() < 20) {
+                    imagePath = "src/sample/images/midinglyhot.png";
+                } else {
+                    imagePath = "src/sample/images/hot.png";
+                }
+            }
+            File file = new File(imagePath);
+            Image image = new Image(file.toURI().toString());
+            weather_conditions_image.setImage(image);
+        }
+
 
     }
+
+    private void clearData() {
+
+        weatherStation.getDataHolder().clearData();
+        if (chartsController != null) {
+            chartsController.clearData();
+        }
+        if (statisticsController != null) {
+            statisticsController.clearData();
+        }
+        if (dataTablesController != null) {
+            dataTablesController.clearData();
+        }
+
+        temperature_text.setText("-");
+        humidity_text.setText("-");
+        pressure_text.setText("-");
+
+    }
+
 }

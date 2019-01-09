@@ -20,6 +20,15 @@ public class DataHolder {
         return weatherDataSet;
     }
 
+    public void setWeatherDataSet(ArrayList<WeatherData> weatherDataSet) {
+        clearData();
+        this.weatherDataSet = weatherDataSet;
+        for (WeatherData w:weatherDataSet) {
+            temperatureValues.add(w.getTemp());
+            pressureValues.add(w.getPressure());
+            humidityValues.add(w.getHumidity());
+        }
+    }
 
     public void saveToJson(String filePath) {
 
@@ -58,6 +67,9 @@ public class DataHolder {
 
     public void clearData() {
         weatherDataSet.clear();
+        temperatureValues.clear();
+        humidityValues.clear();
+        pressureValues.clear();
     }
 
 }

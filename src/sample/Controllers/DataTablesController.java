@@ -67,15 +67,19 @@ public class DataTablesController extends AnchorPane implements Initializable, O
     public void initialize(URL url, ResourceBundle resourceBundle) {
         weatherStation= new WeatherStation();
         columnsInit();
-        weatherdata_table.getItems().addAll(weatherStation.getDataHolder().getWeatherDataSet());
+        displayData();
 
+
+    }
+
+    private void displayData() {
+        weatherdata_table.getItems().addAll(weatherStation.getDataHolder().getWeatherDataSet());
 
     }
 
     @Override
         public void update(Observable observable, Object o) {
         weatherStation = (WeatherStation) observable;
-        WeatherData w = weatherStation.getWeatherData();
         weatherdata_table.getItems().setAll(weatherStation.getDataHolder().getWeatherDataSet());
 
     }
@@ -90,5 +94,12 @@ public class DataTablesController extends AnchorPane implements Initializable, O
         date_column.setCellValueFactory(new PropertyValueFactory<WeatherData, String>("registrationDate"));
 
 
+    }
+
+    public void clearData() {
+        weatherdata_table.getItems().removeAll();
+        weatherdata_table.refresh();
+        for (int i=0; i<weatherdata_table.getItems().size();i++)
+        weatherdata_table.getItems().set(i,null);
     }
 }
