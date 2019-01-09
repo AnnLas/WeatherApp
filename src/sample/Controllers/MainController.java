@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sample.Forecast.Request;
 import sample.WeatherData.DataHolder;
 import sample.WeatherData.WeatherData;
 import sample.WeatherData.WeatherStation;
@@ -32,6 +33,7 @@ public class MainController implements Observer {
     private ChartsController chartsController;
     private DataTablesController dataTablesController;
     private StatisticsController statisticsController;
+    private ForecastChartsController forecastChartsController;
 
 
     public MainController() {
@@ -121,11 +123,19 @@ public class MainController implements Observer {
         }
     }
 
+
+    public void showForecast(MouseEvent event) {
+        main_pane.getChildren().clear();
+        Request request = new Request(town_search.getText());
+        forecastChartsController = new ForecastChartsController(request);
+        main_pane.setCenter(forecastChartsController);
+
+    }
     public void showCharts(MouseEvent mouseEvent) {
         main_pane.getChildren().clear();
         chartsController = new ChartsController(weatherStation);
         main_pane.setCenter(chartsController);
-        showCurrentData(weatherStation.getWeatherData());
+
 
     }
 
@@ -133,7 +143,7 @@ public class MainController implements Observer {
         main_pane.getChildren().clear();
         statisticsController = new StatisticsController(weatherStation);
         main_pane.setCenter(statisticsController);
-        showCurrentData(weatherStation.getWeatherData());
+
 
 
     }
@@ -142,7 +152,7 @@ public class MainController implements Observer {
         main_pane.getChildren().clear();
         dataTablesController = new DataTablesController(weatherStation);
         main_pane.setCenter(dataTablesController);
-        showCurrentData(weatherStation.getWeatherData());
+
     }
 
     @FXML

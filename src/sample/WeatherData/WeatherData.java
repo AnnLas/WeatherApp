@@ -12,6 +12,7 @@ public class WeatherData  {
     private String town;
     private LocalTime registrationTime;
     private LocalDate registrationDate;
+    private String forecastTimeAndDate;
 
 
 
@@ -58,7 +59,13 @@ public class WeatherData  {
     }
 
 
+    public void setForecastTimeAndDate(String forecastTime) {
+        this.forecastTimeAndDate = forecastTime;
+    }
 
+    public String getForecastTimeAndDate() {
+        return forecastTimeAndDate;
+    }
 
     public void setData(WeatherData weatherData) {
         this.temp = weatherData.temp;

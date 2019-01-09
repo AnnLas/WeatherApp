@@ -79,14 +79,17 @@ public class WeatherStation extends Observable implements Runnable {
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
             connection.setRequestMethod("GET");
             responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+            } else {
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
             }
-            in.close();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -101,7 +104,7 @@ public class WeatherStation extends Observable implements Runnable {
         WeatherData townWeather = gson.fromJson((JsonElement) jsonElement, WeatherData.class);
         townWeather.setTown(town);
         weatherData.setData(townWeather);
-       // System.out.println(townWeather.toString());
+        // System.out.println(townWeather.toString());
         setCurrentParameters(townWeather);
         dataHolder.updateData(townWeather);
         return townWeather;
@@ -124,11 +127,13 @@ public class WeatherStation extends Observable implements Runnable {
         }
 
     }
+
     private void setCurrentParameters(WeatherData weatherData) {
         this.weatherData = weatherData;
         parametersChanged();
     }
-        private void parametersChanged(){
+
+    private void parametersChanged() {
         setChanged();
         notifyObservers();
     }
