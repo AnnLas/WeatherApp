@@ -5,8 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.Forecast.Request;
 
+/**
+ * Klasa służąca do inicjalizacji głównej sceny aplikacji.
+ */
 public class Main extends Application {
 
     @Override

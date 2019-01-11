@@ -13,10 +13,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+
+/**
+ *StaticticsController jest klasą odpowiedzialną za obliczanie i wyświetlanie statystyk pogodowych(średnia, odchylenie standardowe,
+ * wartoś maksymalna, wartość minimalna) w panelu AnchorPane. Dane te są na bieżąco aktualizowane i wyświetlane w stosunku do
+ * zmian w obiekcie klasy WeatherStation.
+ */
 public class StatisticsController extends AnchorPane implements Initializable, Observer {
     private WeatherStation weatherStation;
     private DataHolder dataHolder;
 
+    /**
+     * Tworzy instancję klasy StatisticsController.
+     * Wyświetla fragment sceny.
+     * @param weatherStation - obiekt klasy WeatherStation
+     */
     public StatisticsController (WeatherStation weatherStation)
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/statistics.fxml"));
@@ -56,15 +67,26 @@ public class StatisticsController extends AnchorPane implements Initializable, O
         displayData();
     }
 
+    /**
+     * Aktualizuje dane pogodowe i statyski.
+     * @param observable
+     * @param o
+     */
     @Override
     public void update(Observable observable, Object o) {
         weatherStation = (WeatherStation) observable;
+        weatherStation.addObserver(this);
         dataHolder = weatherStation.getDataHolder();
         displayData();
 
     }
 
 
+    /**
+     * Liczy statystyki dla podanej listy danych.
+     * @param arrayList - lista danych
+     * @return tekst z obliczonymi statystykami
+     */
     private String calcStats(ArrayList <Double> arrayList) {
         double sumMean = 0;
         double sumStd = 0;
@@ -87,13 +109,16 @@ public class StatisticsController extends AnchorPane implements Initializable, O
         return String.format("%nAverage: %.2f%nNumber of records: %d%nMin: %.2f%nMax: %.2f%nStandard deviation: %.2f%n", average, arrayList.size(), min, max, standardDeviation);
     }
 
-    public void displayData(){
+    private void displayData(){
         Platform.runLater(()->{
          pressure_stats.setText(calcStats(dataHolder.getPressureValues()));
          temperature_stats.setText(calcStats(dataHolder.getTemperatureValues()));
          humidity_stats.setText(calcStats(dataHolder.getHumidityValues()));
         });
     }
+    /**
+     * Usuwa obliczone statystyki z pól tekstowych.
+     */
     public void clearData(){
         pressure_stats.setText("-");
         temperature_stats.setText("-");

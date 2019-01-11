@@ -20,15 +20,24 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-public class ChartsController extends AnchorPane implements Initializable, Observer  {
+/**
+ * ChartsController jest klasą odpowiedzialną za wyświetlanie danych pogodowych(temperatura, ciśnienie, wilgotność)
+ * na wykresach w panelu AnchorPane. Dane te są na bieżąco aktualizowane i wyświetlane w stosunku do zmian w obiekcie
+ * klasy WeatherStation.
+ */
+public class ChartsController extends AnchorPane implements Initializable, Observer {
     private WeatherStation weatherStation;
-    XYChart.Series<String, Double> temp_series;
-    XYChart.Series<String, Double> humidity_series;
-    XYChart.Series<String, Double> pressure_series;
+    private XYChart.Series<String, Double> temp_series;
+    private XYChart.Series<String, Double> humidity_series;
+    private XYChart.Series<String, Double> pressure_series;
     private String townName;
 
-    public ChartsController(WeatherStation weatherStation)
-    {
+    /**
+     * Tworzy instancję klasy ChartsController.
+     * Wyświetla fragment sceny.
+     * @param weatherStation - obiekt klasy WeatherStation
+     */
+    public ChartsController(WeatherStation weatherStation) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/charts.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -58,44 +67,44 @@ public class ChartsController extends AnchorPane implements Initializable, Obser
     @FXML
     private LineChart<String, Double> pressure_chart;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        weatherStation= new WeatherStation();
+        weatherStation = new WeatherStation();
 
     }
 
+    /**
+     * Aktualizuje dane poodowe na wykresie.
+     * @param observable
+     * @param o
+     */
     @Override
     public void update(Observable observable, Object o) {
         weatherStation = (WeatherStation) observable;
         WeatherData w = weatherStation.getWeatherData();
-        addDataToChart(w);
-    }
-    public void update(Observable observable){
-        weatherStation = (WeatherStation) observable;
-        WeatherData w = weatherStation.getWeatherData();
+        weatherStation.addObserver(this);
         addDataToChart(w);
     }
 
-    public void showData(DataHolder dataHolder) {
+    private void showData(DataHolder dataHolder) {
 
         townName = "";
 
         for (WeatherData w : dataHolder.getWeatherDataSet()) {
-           addDataToChart(w);
+            addDataToChart(w);
         }
-
 
 
     }
 
-    private void addDataToChart(WeatherData weatherData){
+    private void addDataToChart(WeatherData weatherData) {
         Platform.runLater(() -> {
             if (townName.equals(weatherData.getTown())) {
                 temp_series.getData().add(new XYChart.Data<>(weatherData.getRegistrationTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), weatherData.getTemp()));
                 humidity_series.getData().add(new XYChart.Data<>(weatherData.getRegistrationTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), weatherData.getHumidity()));
                 pressure_series.getData().add(new XYChart.Data<>(weatherData.getRegistrationTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), weatherData.getPressure()));
-            }
-            else {
+            } else {
                 temp_series = new XYChart.Series<>();
                 humidity_series = new XYChart.Series<>();
                 pressure_series = new XYChart.Series<>();
@@ -113,7 +122,11 @@ public class ChartsController extends AnchorPane implements Initializable, Obser
         });
 
     }
-    public void clearData(){
+
+    /**
+     * Usuwa dane pogodowe z wykresów i serii danych
+     */
+    public void clearData() {
         humidity_series.getData().clear();
         temp_series.getData().clear();
         pressure_series.getData().clear();

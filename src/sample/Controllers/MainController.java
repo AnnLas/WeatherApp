@@ -10,13 +10,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sample.Forecast.Request;
-import sample.WeatherData.DataHolder;
 import sample.WeatherData.WeatherData;
 import sample.WeatherData.WeatherStation;
 
@@ -26,16 +24,19 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * Główny kontroler odpowiadający za wyświetlanie odpowiednich widoków w głównym oknie aplikacji
+ */
 public class MainController implements Observer {
     private WeatherStation weatherStation;
-    private Observable weatherData;
-    private DataHolder dataHolder;
     private ChartsController chartsController;
     private DataTablesController dataTablesController;
     private StatisticsController statisticsController;
     private ForecastChartsController forecastChartsController;
 
-
+    /**
+     * Tworzy instancję klasy MainController
+     */
     public MainController() {
         weatherStation = new WeatherStation();
         weatherStation.addObserver(this);
@@ -55,9 +56,6 @@ public class MainController implements Observer {
     private ImageView weather_conditions_image;
 
     @FXML
-    private HBox main_box;
-
-    @FXML
     private TextField town_search;
 
     @FXML
@@ -72,11 +70,17 @@ public class MainController implements Observer {
     @FXML
     private BorderPane main_pane;
 
+    /**
+     * Przerywa wysyłanie zapytań do serwera OpenWeather
+     * Wyświetla okno z wyborem ścieżki do miejsca zapisu danych pogodowych.
+     * Usuwa dane z pól tekstowych, tabel i wykresów.
+     * Zapisuje dane pogodowe w wybranym miejscu.
+     *
+     * @param event - naciśnięcie przycisku
+     */
     @FXML
     void inerruptRegistration(ActionEvent event) {
         weatherStation.interrupt();
-        //zapis
-
         DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage stage = new Stage();
         stage.setTitle("Choose directory");
@@ -93,7 +97,11 @@ public class MainController implements Observer {
         interrupt_button.setDisable(true);
     }
 
-
+    /**
+     * Rozpoczyna wysyłanie zapytań do serwera OpenWeather
+     *
+     * @param event - naciśnięcie przycisku
+     */
     @FXML
     void startRegistration(ActionEvent event) {
         if (weatherStation.getTown() == null || !weatherStation.getTown().equals(town_search.getText())) {
@@ -123,7 +131,11 @@ public class MainController implements Observer {
         }
     }
 
-
+    /**
+     * Umieszcza widok prognozy pogody w głównym panelu sceny.
+     *
+     * @param event - naciśnięcie przycisku
+     */
     public void showForecast(MouseEvent event) {
         main_pane.getChildren().clear();
         Request request = new Request(town_search.getText());
@@ -131,6 +143,12 @@ public class MainController implements Observer {
         main_pane.setCenter(forecastChartsController);
 
     }
+
+    /**
+     * Umieszcza widok wykresów w głównym panelu sceny.
+     *
+     * @param mouseEvent - naciśnięcie przycisku
+     */
     public void showCharts(MouseEvent mouseEvent) {
         main_pane.getChildren().clear();
         chartsController = new ChartsController(weatherStation);
@@ -139,15 +157,24 @@ public class MainController implements Observer {
 
     }
 
+    /**
+     * Umieszcza widok statystyk pogodowych w głównym panelu sceny.
+     *
+     * @param mouseEvent - naciśnięcie przycisku
+     */
     public void showStatistics(MouseEvent mouseEvent) {
         main_pane.getChildren().clear();
         statisticsController = new StatisticsController(weatherStation);
         main_pane.setCenter(statisticsController);
 
 
-
     }
 
+    /**
+     * Umieszcza widok tabel z danymi pogodowymi w głównym panelu sceny.
+     *
+     * @param mouseEvent - naciśnięcie przycisku
+     */
     public void showDataTable(MouseEvent mouseEvent) {
         main_pane.getChildren().clear();
         dataTablesController = new DataTablesController(weatherStation);
@@ -155,6 +182,13 @@ public class MainController implements Observer {
 
     }
 
+    /**
+     * Wyświetla okno z wyborem pliku typu json z danymi pogodowymi.
+     * Dodaje dane do pól tekstowych, tabel i wykresów.
+     *
+     * @param event - nacisnięcie przycisku
+     * @return dane pogodowe
+     */
     @FXML
     WeatherData[] openFile(ActionEvent event) {
 
@@ -182,13 +216,24 @@ public class MainController implements Observer {
         return dataFromFile;
     }
 
+    /**
+     * Aktualizuje dane pogodowe wyświetlane w panelu boczne i przesyłane do pozostałych kontrolerów.
+     * @param observable
+     * @param o
+     */
     @Override
     public void update(Observable observable, Object o) {
         weatherStation = (WeatherStation) observable;
+        weatherStation.addObserver(this);
         System.out.println("results:" + weatherStation.getWeatherData().toString());
         showCurrentData(weatherStation.getWeatherData());
     }
 
+    /**
+     * Wyświetla bierzące dane pogodowe w panelu bocznym
+     *
+     * @param weather - dane pogodowe
+     */
     private void showCurrentData(WeatherData weather) {
         if (weatherStation.getResponseCode() == 200 && weatherStation.getDataHolder().getHumidityValues().size() != 0) {
             temperature_text.setText((weather.getTemp()) + "C");

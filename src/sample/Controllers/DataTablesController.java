@@ -1,8 +1,5 @@
 package sample.Controllers;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,7 +7,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import sample.WeatherData.DataHolder;
 import sample.WeatherData.WeatherData;
 import sample.WeatherData.WeatherStation;
 
@@ -19,7 +15,11 @@ import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-
+/**
+ *DataTables Controller jest klasą odpowiedzialną za wyświetlanie danych pogodowych(temperatura, ciśnienie, wilgotność)
+ * w tabeli w panelu AnchorPane. Dane te są na bieżąco aktualizowane i wyświetlane w stosunku do zmian w obiekcie
+ * klasy WeatherStation.
+ */
 public class DataTablesController extends AnchorPane implements Initializable, Observer {
     private WeatherStation weatherStation;
 
@@ -43,6 +43,11 @@ public class DataTablesController extends AnchorPane implements Initializable, O
     @FXML
     private TableColumn<WeatherData, String> humidity_column;
 
+    /**
+     * Tworzy instancję klasy DataTablesController.
+     * Wyświetla fragment sceny.
+     * @param weatherStation - obiekt klasy WeatherStation
+     */
     public DataTablesController(WeatherStation weatherStation) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/data_tables.fxml"));
         fxmlLoader.setRoot(this);
@@ -77,6 +82,11 @@ public class DataTablesController extends AnchorPane implements Initializable, O
 
     }
 
+    /**
+     * Aktualizuje dane pogodowe w tabelach.
+     * @param observable
+     * @param o
+     */
     @Override
         public void update(Observable observable, Object o) {
         weatherStation = (WeatherStation) observable;
@@ -87,11 +97,11 @@ public class DataTablesController extends AnchorPane implements Initializable, O
 
     private void columnsInit(){
         town_column.setCellValueFactory(new PropertyValueFactory<>("town"));
-        pressure_column.setCellValueFactory(new PropertyValueFactory<WeatherData, String>("pressure"));
+        pressure_column.setCellValueFactory(new PropertyValueFactory<>("pressure"));
         humidity_column.setCellValueFactory(new PropertyValueFactory<>("humidity"));
-        temperature_column.setCellValueFactory(new PropertyValueFactory<WeatherData, String>("temp"));
-        time_column.setCellValueFactory(new PropertyValueFactory<WeatherData, String>("registrationTime"));
-        date_column.setCellValueFactory(new PropertyValueFactory<WeatherData, String>("registrationDate"));
+        temperature_column.setCellValueFactory(new PropertyValueFactory<>("temp"));
+        time_column.setCellValueFactory(new PropertyValueFactory<>("registrationTime"));
+        date_column.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
 
 
     }

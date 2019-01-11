@@ -7,14 +7,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Służy do wykonywania zapytań do serwera OpenWeather w celu uzyskania prognozy pogody.
+ */
 public class Request {
-    private int responseCode;
-    ArrayList<WeatherData> forecast;
+    private ArrayList<WeatherData> forecast;
+
+    /**
+     * Tworzy i wysyła zapytanie do serwera OpenWeather, o prognozę pogody w danym mieście.
+     *
+     * @param town - nazwa wybranego miasta
+     */
+
     public Request(String town) {
         String APPID = "eea1a6f437205efef41e5b8f5f9cd097";
         String url = "http://api.openweathermap.org/data/2.5/forecast?q=" + town + "&units=metric&APPID=" + APPID;
@@ -24,7 +32,6 @@ public class Request {
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
             connection.setRequestMethod("GET");
-            responseCode = connection.getResponseCode();
 
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;
@@ -35,8 +42,6 @@ public class Request {
             in.close();
             System.out.println(response);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,7 +50,7 @@ public class Request {
         JsonArray jsonArray = jsonObj.getAsJsonArray("list");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         forecast = new ArrayList<>();
-        for (int i=0;i<jsonArray.size(); i++){
+        for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject listItem = (JsonObject) jsonArray.get(i);
             Object jsonElement = listItem.getAsJsonObject("main");
             forecast.add(gson.fromJson((JsonElement) jsonElement, WeatherData.class));
@@ -58,6 +63,11 @@ public class Request {
 
     }
 
+    /**
+     * Metoda zwracająca prognozę pogody
+     *
+     * @return forecast - lista z danymi dotyczącymi przyszłych warunków pogodowych w danym mieście
+     */
     public ArrayList<WeatherData> getForecast() {
         return forecast;
     }

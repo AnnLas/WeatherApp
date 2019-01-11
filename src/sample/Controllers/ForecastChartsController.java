@@ -10,34 +10,39 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import sample.Forecast.Request;
-import sample.WeatherData.DataHolder;
 import sample.WeatherData.WeatherData;
-import sample.WeatherData.WeatherStation;
+
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.format.DateTimeFormatter;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
+/**
+ * ForecastController jest klasą odpowiedzialną za wyświetlanie prognozy pogody w wybranym mieście
+ * (temperatura, ciśnienie, wilgotność) na wykresach w panelu AnchorPane.
+ */
 public class ForecastChartsController extends AnchorPane implements Initializable {
     private Request request;
     private String townName;
     XYChart.Series<String, Double> temp_series;
     XYChart.Series<String, Double> humidity_series;
     XYChart.Series<String, Double> pressure_series;
-    public ForecastChartsController(Request request)
-    {
 
-        this.request = request;
+    /**
+     * Tworzy instancję klasy ForecastController.
+     * Wyświetla fragment sceny
+     * @param forecastRequest - zapytanie o prognozę pogody
+     */
+    public ForecastChartsController(Request forecastRequest) {
+
+        this.request = forecastRequest;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/charts.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
         try {
             fxmlLoader.load();
-            showData(request);
+            showData(forecastRequest);
 
         } catch (
                 IOException e) {
@@ -64,30 +69,26 @@ public class ForecastChartsController extends AnchorPane implements Initializabl
     }
 
 
-
-    public void showData(Request request) {
+    private void showData(Request request) {
 
         townName = "";
 
         for (WeatherData w : request.getForecast()) {
-           addDataToChart(w);
+            addDataToChart(w);
         }
-
-
 
     }
 
-    private void addDataToChart(WeatherData weatherData){
-        humidity_chart.setTitle(townName+ "forecast");
+    private void addDataToChart(WeatherData weatherData) {
+        humidity_chart.setTitle(townName + "forecast");
         pressure_chart.setTitle(townName + " forecast");
-        temperature_chart.setTitle(townName+" forecast");
+        temperature_chart.setTitle(townName + " forecast");
         Platform.runLater(() -> {
             if (townName.equals(weatherData.getTown())) {
                 temp_series.getData().add(new XYChart.Data<>(weatherData.getForecastTimeAndDate(), weatherData.getTemp()));
                 humidity_series.getData().add(new XYChart.Data<>(weatherData.getForecastTimeAndDate(), weatherData.getHumidity()));
                 pressure_series.getData().add(new XYChart.Data<>(weatherData.getForecastTimeAndDate(), weatherData.getPressure()));
-            }
-            else {
+            } else {
                 temp_series = new XYChart.Series<>();
                 humidity_series = new XYChart.Series<>();
                 pressure_series = new XYChart.Series<>();
@@ -105,7 +106,11 @@ public class ForecastChartsController extends AnchorPane implements Initializabl
         });
 
     }
-    public void clearData(){
+
+    /**
+     * Usuwa dane pogodowe z wykresów i serii danych
+     */
+    public void clearData() {
         humidity_series.getData().clear();
         temp_series.getData().clear();
         pressure_series.getData().clear();
@@ -114,6 +119,4 @@ public class ForecastChartsController extends AnchorPane implements Initializabl
         pressure_chart.getData().clear();
 
     }
-
-
 }
